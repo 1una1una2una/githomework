@@ -1,4 +1,1 @@
-python3 -c "
-with open('/home/vboxuser/docker-hw/app/main.py', 'rb') as f:
-    print(repr(f.read()))
-"
+python3 -c "open('/home/vboxuser/docker-hw/app/main.py','w').write('from flask import Flask\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef hello():\n    return \"Hello from app container!\"\n\nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000)\n')"

@@ -1,1 +1,17 @@
-python3 -c "open('/home/vboxuser/docker-hw/app/main.py','w').write('from flask import Flask\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef hello():\n    return \"Hello from app container!\"\n\nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000)\n')"
+python3 << 'PYEOF'
+code = (
+    "from flask import Flask\n"
+    "\n"
+    "app = Flask(__name__)\n"
+    "\n"
+    "@app.route('/')\n"
+    "def hello():\n"
+    "    return 'Hello from app container!'\n"
+    "\n"
+    "if __name__ == '__main__':\n"
+    "    app.run(host='0.0.0.0', port=5000)\n"
+)
+with open('/home/vboxuser/docker-hw/app/main.py', 'w') as f:
+    f.write(code)
+print("Done")
+PYEOF

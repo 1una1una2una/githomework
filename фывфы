@@ -1,34 +1,3 @@
-rm ~/docker-hw/app/main.py
-rm ~/docker-hw/client/client.py
+printf 'from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/")\ndef hello():\n    return "Hello from app container!"\n\nif __name__ == "__main__":\n    app.run(host="0.0.0.0", port=5000)\n' > ~/docker-hw/app/main.py
 
-cat > ~/docker-hw/app/main.py << 'EOF'
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route("/")
-def hello():
-    return "Hello from app container!"
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-EOF
-
-
-cat > ~/docker-hw/client/client.py << 'EOF'
-import requests
-import time
-
-while True:
-    try:
-        response = requests.get("http://app:5000/")
-        print("[OK] status=" + str(response.status_code) + " body=" + response.text, flush=True)
-    except Exception as e:
-        print("[ERROR] " + str(e), flush=True)
-    time.sleep(5)
-EOF
-
-cd ~/docker-hw
-docker compose down
-docker compose up -d --build
-docker compose logs -f
+printf 'import requests\nimport time\n\nwhile True:\n    try:\n        response = requests.get("http://app:5000/")\n        print("[OK] status=" + str(response.status_code) + " body=" + response.text, flush=True)\n    except Exception as e:\n        print("[ERROR] " + str(e), flush=True)\n    time.sleep(5)\n' > ~/docker-hw/client/client.py

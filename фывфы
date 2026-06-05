@@ -1,0 +1,34 @@
+rm ~/docker-hw/app/main.py
+rm ~/docker-hw/client/client.py
+
+cat > ~/docker-hw/app/main.py << 'EOF'
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Hello from app container!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF
+
+
+cat > ~/docker-hw/client/client.py << 'EOF'
+import requests
+import time
+
+while True:
+    try:
+        response = requests.get("http://app:5000/")
+        print("[OK] status=" + str(response.status_code) + " body=" + response.text, flush=True)
+    except Exception as e:
+        print("[ERROR] " + str(e), flush=True)
+    time.sleep(5)
+EOF
+
+cd ~/docker-hw
+docker compose down
+docker compose up -d --build
+docker compose logs -f
